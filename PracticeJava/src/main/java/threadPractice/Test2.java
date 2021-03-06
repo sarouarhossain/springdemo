@@ -2,6 +2,7 @@ package threadPractice;
 
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
@@ -31,10 +32,21 @@ public class Test2 {
 
     Instant startTime = Instant.now();
 
-    WebClient webClient = WebClient.create();
-    Scheduler scheduler = Schedulers.newBoundedElastic(10, 10, "test");
+    getData(uris)
+        .subscribe(
+            x -> {
+              System.out.println("Max : " + x);
+              Instant endTime = Instant.now();
+              System.out.println(
+                  "Total Execution Time: " + Duration.between(startTime, endTime).toMillis());
+            });
+  }
 
-    Flux.fromArray(uris)
+  static Mono<Integer> getData(String[] uris) {
+    WebClient webClient = WebClient.create();
+    Scheduler scheduler = Schedulers.newParallel("test", 10);
+
+    return Flux.fromArray(uris)
         .publishOn(scheduler)
         .flatMap(
             uri ->
@@ -43,15 +55,7 @@ public class Test2 {
         .map(
             list -> {
               System.out.println("Data List: " + Arrays.toString(list.toArray()));
-
               return Collections.max(list);
-            })
-        .subscribe(
-            x -> {
-              System.out.println("Max : " + x);
-              Instant endTime = Instant.now();
-              System.out.println(
-                  "Total Execution Time: " + Duration.between(startTime, endTime).toMillis());
             });
   }
 }

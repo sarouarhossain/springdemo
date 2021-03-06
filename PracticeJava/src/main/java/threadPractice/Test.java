@@ -49,8 +49,7 @@ public class Test {
                         .sendAsync(
                             HttpRequest.newBuilder(target).GET().build(),
                             HttpResponse.BodyHandlers.ofString())
-                        .thenApplyAsync(
-                            response -> Integer.parseInt(response.body()), getExecutor()))
+                        .thenApplyAsync(response -> Integer.parseInt(response.body())))
             .collect(Collectors.toList());
 
     var allFutures =
@@ -60,8 +59,7 @@ public class Test {
         allFutures.thenApplyAsync(
             v -> {
               return futures.stream().map(future -> future.join()).collect(Collectors.toList());
-            },
-            getExecutor());
+            });
 
     List<Integer> dataList = resultFutures.join();
 

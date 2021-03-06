@@ -51,7 +51,7 @@ public class Test3 {
       callableTask.add(callable);
     }
 
-    ExecutorService executorService = Executors.newFixedThreadPool(5);
+    ExecutorService executorService = Executors.newFixedThreadPool(10);
 
     var futures = executorService.invokeAll(callableTask);
 
