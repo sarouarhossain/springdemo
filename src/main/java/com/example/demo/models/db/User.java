@@ -1,11 +1,15 @@
-package com.example.demo.models;
+package com.example.demo.models.db;
 
 import lombok.Data;
 
-@Data
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+
+@Entity
 public class User {
-    private String username;
-    private String email;
-    private String password;
-    private Integer age;
+  @GeneratedValue private Long id;
+  private String username;
+  private String email;
+  private String password;
+  private Integer age;
 }

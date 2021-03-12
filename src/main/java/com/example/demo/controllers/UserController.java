@@ -1,6 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.User;
+import com.example.demo.models.db.User;
 import com.example.demo.models.UserForm;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
