@@ -30,7 +30,7 @@ public class Amicable {
         });
   }
 
-  public void printData(Integer limit) {
+  public void printAmicable(Integer limit) {
 
     var futures =
         IntStream.range(2, limit)
@@ -70,6 +70,6 @@ public class Amicable {
 
   public static void main(String[] args) {
     Amicable amicable = new Amicable();
-    amicable.printData(999999);
+    amicable.printAmicable(999999);
   }
 }
