@@ -20,10 +20,11 @@ public class Amicable {
   CompletableFuture<Data> getSumDivs(Integer num) {
     return CompletableFuture.supplyAsync(
         () -> {
-          Integer sum = 0;
-          for (int i = 1; i <= num / 2; i++) {
+          Integer sum = 1;
+          for (int i = 2; i <= Math.sqrt(num); i++) {
             if (num % i == 0) {
               sum += i;
+              sum += num / i;
             }
           }
           return new Data(num, sum);
@@ -35,10 +36,8 @@ public class Amicable {
     var futures =
         IntStream.range(2, limit)
             .boxed()
-            .map(
-                num -> {
-                  return getSumDivs(num);
-                })
+            .parallel()
+            .map(this::getSumDivs)
             .collect(Collectors.toList());
 
     var allFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
@@ -46,9 +45,7 @@ public class Amicable {
     var allData =
         allFuture
             .thenApplyAsync(
-                v -> {
-                  return futures.stream().map(f -> f.join()).collect(Collectors.toList());
-                })
+                v -> futures.stream().map(CompletableFuture::join).collect(Collectors.toList()))
             .join();
 
     Map<Integer, Integer> mapDiv = new HashMap<>();
@@ -58,14 +55,18 @@ public class Amicable {
           if (data.sumDiv != 1) mapDiv.put(data.num, data.sumDiv);
         });
 
+    int count = 0;
     for (int i = 2; i <= limit; i++) {
       var x = mapDiv.get(i);
       var y = mapDiv.get(x);
 
-      if (y != null && i == y) {
+      if (y != null && i == y && i <= x) {
         System.out.println(i + " and " + x + " are amicable");
+        count++;
       }
     }
+
+    System.out.println("Count : " + count);
   }
 
   public static void main(String[] args) {
