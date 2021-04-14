@@ -57,8 +57,8 @@ public class AmicableService {
     return CompletableFuture.supplyAsync(
         () -> {
           System.out.println(Thread.currentThread().getName());
-          Integer sum = 0;
-          for (int i = 1; i <= Math.sqrt(num); i++) {
+          Integer sum = 1;
+          for (int i = 2; i <= Math.sqrt(num); i++) {
             if (num % i == 0) {
               sum += i;
               sum += num / i;
